@@ -26,7 +26,7 @@ def get_credentials(packet):
         for keyword in keywords:
             if keyword in load:
                 return load
-        
+
 
 def process_packets(packet):
     if packet.haslayer(http.HTTPRequest):
