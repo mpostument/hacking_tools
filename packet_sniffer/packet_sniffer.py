@@ -34,7 +34,7 @@ def process_packets(packet):
         print("[+] Http Request >> " + url)
         credentials = get_credentials(packet)
         if credentials:
-            print("[+] Possible username/passowrd" + credentials + "\n\n")
+            print("[+] Possible username/passowrd " + credentials + "\n\n")
 
 
 options = get_arguments()
