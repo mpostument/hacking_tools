@@ -26,6 +26,7 @@ def replace_file(packet):
     options = get_arguments()
     http_packet = scapy.IP(packet.get_payload())
     if http_packet.haslayer(scapy.Raw):
+        print(http_packet.show())
         if http_packet[scapy.TCP].dport == 80:
             if ".exe" in http_packet[scapy.Raw].load:
                 ack_list.append(http_packet[scapy.TCP].ack)
